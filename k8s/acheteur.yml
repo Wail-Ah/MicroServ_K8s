@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: acheteur-service-app
+  labels:
+    app: acheteur-service-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: acheteur-service-app
+  template:
+    metadata:
+      name: acheteur-service-app
+      labels:
+        app: acheteur-service-app
+    spec:
+      containers:
+        - name: acheteur-service-app
+          image: acheteur-service-img:v1
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8082
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: acheteur-service-svc
+spec:
+  selector:
+    app: acheteur-service-app
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8082
+  type: ClusterIP

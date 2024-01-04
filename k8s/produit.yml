@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: produit-service-app
+  labels:
+    app: produit-service-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: produit-service-app
+  template:
+    metadata:
+      name: produit-service-app
+      labels:
+        app: produit-service-app
+    spec:
+      containers:
+        - name: produit-service-app
+          image: produit-service-img:v1
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8083
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: produit-service
+spec:
+  selector:
+    app: produit
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8083
+  type: NodePort
